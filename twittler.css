@@ -1,0 +1,74 @@
+body {
+	background-color:#5e7d90;
+	color: whitesmoke;	
+}
+
+header {
+	display: flex;
+	justify-content: center;
+	background-color: #194554;
+
+}
+
+h1 {
+	color: whitesmoke;
+	background-color: #194554;
+	font-size: 50px;
+	font-family: fantasy;
+	border: 5px solid #5e7d90;
+	padding: 20px;
+	border-radius: 100%;
+	letter-spacing: 1px;
+}
+
+h3 {
+	text-align: center;
+	text-decoration: underline;
+}
+
+.btn {
+	display: flex;
+	justify-content: center;
+	margin: 10px;
+}
+
+button {
+	color: whitesmoke;
+	background-color: #194554; 
+	font-family: initial;
+	font-size: 18px;
+	padding: 10px;
+	margin: 5px;
+	border: 2px solid whitesmoke;
+
+}
+
+button:hover {
+	cursor: pointer;
+}
+
+#allTweets {
+	margin-right: 200px;
+}
+
+.container {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-evenly;
+	font-family: Helvetica;
+	font-weight: lighter;
+	line-height: 2;
+	margin-top: 50px;
+
+}
+
+
+.timestamps time {
+	display:block;
+	margin-right:15px;
+}
+
+.tweeters div:hover {
+	text-decoration: underline;
+	cursor: pointer;
+}

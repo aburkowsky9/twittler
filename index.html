@@ -3,12 +3,34 @@
   <head>
     <script src="jquery.js"></script>
     <script src="data_generator.js"></script>
+    <link href="twittler.css" rel="stylesheet" type="text/css">
   </head>
+
   <body>
 
-    <h1>Twittler</h1>
-    <button id="allTweetz">Show All Tweetz</button>
-    <button id="elevenNewestTweets">Newest Tweetz</button>
+    <header>
+      <h1>Twittler</h1>
+    </header>
+
+    <div class="btn">
+      <button id="allTweets">Show All Tweets</button>
+      <button id="elevenNewestTweets">Newest Tweets</button>
+    </div>
+
+    <section class="container">
+
+      <div class="tweeters">
+        <h3>Users</h3>
+      </div>
+      <div class="tweet-content">
+        <h3>Tweet</h3>
+      </div>
+      <div class="timestamps">
+        <h3>Time</h3>
+      </div>
+
+    </section>
+
     <script>
       /*
 streams = {
@@ -19,11 +41,12 @@ streams = {
     douglascalhoun: [{ user: 'douglascalhoun', message: 'tweet0', created_at: time }, { user: 'douglascalhoun', message: 'tweet', created_at: time }, etc...], etc... 
   }
 }
-
+streams.users
 users = ['username1', 'username2', etc...] from window.users = Object.keys(streams.users);
 */
 
       $(document).ready(function(){
+        var $body = $('body');
 
         //display timestamps 
         var MilitaryTimestamp = function(tweetData) { // tweetData = streams.home[i]
@@ -65,66 +88,135 @@ users = ['username1', 'username2', etc...] from window.users = Object.keys(strea
           return tweetData.created_at.toString().split(' ').slice(1, 4).join(' ');
         }
 
-        //landing page initial 11 tweets
-        var $body = $('body');
+        //function for DOM manipulations to add usernames, tweets, timestamps, and clear
+        var addUser = function(tweet) {
+          var $user = $('<div></div>').addClass('users').addClass(tweet.user);
+          $user.text('@' + tweet.user + ': ');
+          $user.appendTo($body);
+          $('.users').appendTo('.tweeters');
+        }
 
+        var addTweet = function(tweet) {
+          var $tweet = $('<div></div>').addClass('tweet');  
+          $tweet.text(tweet.message);
+          $tweet.appendTo($body);
+          $('.tweet').appendTo('.tweet-content');
+        }
+
+        var addTime = function(tweet) {
+          var $dateTime = $('<time></time');
+          var militaryTime = MilitaryTimestamp(tweet);
+          $dateTime.text(convertToStandardTime(militaryTime) + ' ' + tweetDate(tweet));
+          $dateTime.appendTo($body);
+          $('time').appendTo('.timestamps');
+        }
+
+        var clearTweets = function() {
+          $('.users').remove();
+          $('.tweet').remove();
+          $('time').remove();
+        }
+
+
+        //landing page initial 11 tweets
         var index = streams.home.length - 1;
         while(index >= 0){
           var tweet = streams.home[index];
 
-          var $dateTime = $('<time></time')
-          var militaryTime = MilitaryTimestamp(tweet);
-          $dateTime.text(convertToStandardTime(militaryTime) + ' ' + tweetDate(tweet));
-          $dateTime.appendTo($body);
-
-          var $tweet = $('<div></div>');
-          $tweet.text('@' + tweet.user + ': ' + tweet.message);
-          $tweet.appendTo($body);
+          addUser(tweet);
+          addTweet(tweet);
+          addTime(tweet);
 
           index -= 1;
         }
 
         //show all tweets
         var getAllTweets = function() {
-          $('div').remove();
-          $('time').remove();
+          clearTweets();
 
           var index = streams.home.length - 1;
           while(index >= 0){
             var tweet = streams.home[index];
 
-            var $dateTime = $('<time></time')
-            var militaryTime = MilitaryTimestamp(tweet);
-            $dateTime.text(convertToStandardTime(militaryTime) + ' ' + tweetDate(tweet));
-            $dateTime.appendTo($body);
+            addUser(tweet);
+            addTweet(tweet);
+            addTime(tweet);
 
-            var $tweet = $('<div></div>');
-            $tweet.text(  '@' + tweet.user + ': ' + tweet.message);
-            $tweet.appendTo($body);
             index -= 1;
           }
+
+          $('.shawndrost').click(function(){ 
+            filterUserTweets('shawndrost');
+          });
+          $('.mracus').click(function(){ 
+            filterUserTweets('mracus');
+          });
+          $('.douglascalhoun').click(function(){ 
+            filterUserTweets('douglascalhoun');
+          });
+          $('.sharksforcheap').click(function(){ 
+            filterUserTweets('sharksforcheap');
+          });
         } 
-        $('#allTweetz').on('click', getAllTweets);
 
         //only show 11 newest tweets
         var getElevenNewestTweets = function() {
-          $('div').remove();
-          $('time').remove();
+          clearTweets();
 
           for (var i = streams.home.length - 1; i > streams.home.length -  12; i--) {
             var tweet = streams.home[i];
 
-            var $dateTime = $('<time></time')
-            var militaryTime = MilitaryTimestamp(tweet);
-            $dateTime.text(convertToStandardTime(militaryTime) + ' ' + tweetDate(tweet));
-            $dateTime.appendTo($body);
+            addUser(tweet);
+            addTweet(tweet);
+            addTime(tweet);
+          }
+          
+          $('.shawndrost').click(function(){ 
+            filterUserTweets('shawndrost');
+          });
+          $('.mracus').click(function(){ 
+            filterUserTweets('mracus');
+          });
+          $('.douglascalhoun').click(function(){ 
+            filterUserTweets('douglascalhoun');
+          });
+          $('.sharksforcheap').click(function(){ 
+            filterUserTweets('sharksforcheap');
+          });
+        }
 
-            var $tweet = $('<div></div>');
-            $tweet.text('@' + tweet.user + ': ' + tweet.message);
-            $tweet.appendTo($body);
+        //filter tweets by user
+        var filterUserTweets = function(tweeter) {
+          clearTweets();
+
+          var index = streams.users[tweeter].length - 1;
+          while(index >= 0){
+            var tweet = streams.users[tweeter][index];
+
+            addUser(tweet);
+            addTweet(tweet);
+            addTime(tweet);
+
+            index -= 1;
           }
         }
+
+
         $('#elevenNewestTweets').on('click', getElevenNewestTweets);
+        $('#allTweets').on('click', getAllTweets);
+
+        $('.shawndrost').click(function(){ 
+          filterUserTweets('shawndrost');
+        });
+        $('.mracus').click(function(){ 
+          filterUserTweets('mracus');
+        });
+        $('.douglascalhoun').click(function(){ 
+          filterUserTweets('douglascalhoun');
+        });
+        $('.sharksforcheap').click(function(){ 
+          filterUserTweets('sharksforcheap');
+        });
 
       });
         
